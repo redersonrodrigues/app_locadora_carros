@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Marca extends Model
 {
@@ -32,5 +33,15 @@ class Marca extends Model
             'nome.min'      => 'O nome deve ter no mínimo 3 caracteres',
             'imagem.mimes'  => 'A imagem deve ser do tipo PNG'
         ];
+    }
+
+    /**
+     * Get all of the modelos for the Marca
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function modelos(): HasMany
+    {
+        return $this->hasMany(Modelo::class);
     }
 }

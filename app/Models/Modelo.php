@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Modelo extends Model
 {
@@ -20,5 +21,15 @@ class Modelo extends Model
             'air_bag'           => 'required|boolean',
             'abs'               => 'required|boolean' //true, false, 1, 0, "1", "0"
         ];
+    }
+
+    /**
+     * Get the marca that owns the Modelo
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function marca(): BelongsTo
+    {
+        return $this->belongsTo(Marca::class);
     }
 }
