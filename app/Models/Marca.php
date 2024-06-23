@@ -14,7 +14,7 @@ class Marca extends Model
     {
         return [
             'nome'      => 'required|unique:marcas,nome,'.$this->id.'|min:3',
-            'imagem'    => 'required'
+            'imagem'    => 'required|file|mimes:png'
             /**
              * obs: o campo unique tem parametros:
              * 1 - tabela
@@ -30,6 +30,7 @@ class Marca extends Model
             'required'      => 'O campo :attribute é obrigatório',
             'nome.unique'   => 'Já existe uma marca com este nome',
             'nome.min'      => 'O nome deve ter no mínimo 3 caracteres',
+            'imagem.mimes'  => 'A imagem deve ser do tipo PNG'
         ];
     }
 }

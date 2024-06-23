@@ -42,12 +42,16 @@ class MarcaController extends Controller
         
         $image = $request->file('imagem');
         // store('<path>','<disco>') // disco pode ser: local (storage/app/<nome do path>) ou public (storage/app/public/<nome>)
-        $image->store('imagens','public');
-        dd('Upload de arquivos');
+        
+        $imagem_urn = $image->store('imagens','public');
+        //dd($imagem_urn);
 
+        // efetua o cadastro
+        $marca = $this->marca->create([
+            'nome' => $request->nome,
+            'imagem' => $imagem_urn
+        ]);
 
-
-        //$marca = $this->marca->create($request->all());
         return response()->json($marca, 201);
     }
 
