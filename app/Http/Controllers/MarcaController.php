@@ -31,9 +31,16 @@ class MarcaController extends Controller
     public function store(Request $request)
     {
         // validação
-        request()->validate($this->marca->rules(), $this->marca->feedback());
+        $request->validate($this->marca->rules(), $this->marca->feedback());
 
-        $marca = $this->marca->create($request->all());
+        // dd($request->nome);
+        // dd($request->get('nome'));
+        // dd($request->input('nome'));
+
+        // dd($request->imagem);
+        dd($request->file('imagem'));
+
+        //$marca = $this->marca->create($request->all());
         return response()->json($marca, 201);
     }
 
@@ -79,18 +86,16 @@ class MarcaController extends Controller
                 }
             }
            // dd($regrasDinamicas);
-
+        // validação
         request()->validate($regrasDinamicas, $this->marca->feedback()); 
 
         }else {
-    
-        // validação
+        
+         // validação
+        request()->validate($this->marca->rules(), $this->marca->feedback()); 
+
        
         }
-
-
-
-
 
         $marca->update($request->all());
 
