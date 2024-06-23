@@ -7,6 +7,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::get('/', function () {
+    return ['Chegamos até aqui'=> 'SIM'];
+});
+
+
 //Route::resource('cliente', 'App\Http\Controllers\ClienteController');
 Route::prefix('v1')->middleware('jwt.auth')->group(function() {
     Route::post('me', 'App\Http\Controllers\AuthController@me');
