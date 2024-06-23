@@ -64,9 +64,32 @@ class MarcaController extends Controller
         $marca = $this->marca->find($id);
         if ($marca === null) {
             return response()->json(['erro' => 'Impossível realizar a atualização, o recurso pesquisado não existe'], 404);
-        }
+        } 
+
+        // metodo controle patch/put
+        if ($request->method() === 'PATCH') {
+            $regrasDinamicas = array();
+
+            // percorrendo todas as regras definidas no Model
+
+            foreach ($marca->rules() as $input => $regra) {
+                // coletar apenas as regras aplicáveis aos parâmetros parciais da requisição PATCH
+                if (array_key_exists($input, $request->all())) {
+                    $regrasDinamicas[$input] =  $regra;
+                }
+            }
+           // dd($regrasDinamicas);
+
+        request()->validate($regrasDinamicas, $this->marca->feedback()); 
+
+        }else {
+    
         // validação
-        request()->validate($this->marca->rules(), $this->marca->feedback());
+       
+        }
+
+
+
 
 
         $marca->update($request->all());
