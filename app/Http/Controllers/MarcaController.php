@@ -16,33 +16,18 @@ class MarcaController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        //
+        $marca = Marca::create($request->all());
+        return $marca;
     }
 
     /**
      * Display the specified resource.
      */
     public function show(Marca $marca)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Marca $marca)
     {
         //
     }
