@@ -39,11 +39,11 @@ class MarcaController extends Controller
 
         // dd($request->imagem);
         // dd($request->file('imagem'));
-        
+
         $image = $request->file('imagem');
         // store('<path>','<disco>') // disco pode ser: local (storage/app/<nome do path>) ou public (storage/app/public/<nome>)
-        
-        $imagem_urn = $image->store('imagens','public');
+
+        $imagem_urn = $image->store('imagens', 'public');
         //dd($imagem_urn);
 
         // efetua o cadastro
@@ -80,9 +80,13 @@ class MarcaController extends Controller
     {
 
         $marca = $this->marca->find($id);
+
+        // dd($request->nome);
+        // dd($request->file('imagem'));
+
         if ($marca === null) {
             return response()->json(['erro' => 'Impossível realizar a atualização, o recurso pesquisado não existe'], 404);
-        } 
+        }
 
         // metodo controle patch/put
         if ($request->method() === 'PATCH') {
@@ -96,19 +100,21 @@ class MarcaController extends Controller
                     $regrasDinamicas[$input] =  $regra;
                 }
             }
-           // dd($regrasDinamicas);
-        // validação
-        request()->validate($regrasDinamicas, $this->marca->feedback()); 
-
-        }else {
-        
-         // validação
-        request()->validate($this->marca->rules(), $this->marca->feedback()); 
-
-       
+            // dd($regrasDinamicas);
+            // validação
+            request()->validate($regrasDinamicas, $this->marca->feedback());
+        } else {
+            // validação
+            request()->validate($this->marca->rules(), $this->marca->feedback());
         }
-
-        $marca->update($request->all());
+        // prepara a imagem para o update
+        $image = $request->file('imagem');
+        $imagem_urn = $image->store('imagens', 'public');
+        // efetua o update
+        $marca->update([
+            'nome'      => $request->nome,
+            'imagem'    => $imagem_urn
+        ]);
 
         return response()->json($marca, 200);
     }
