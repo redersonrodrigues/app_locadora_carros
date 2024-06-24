@@ -29,6 +29,15 @@ class ModeloController extends Controller
             $modelos = $this->modelo->with('marca');
         }
 
+        if ($request->has('filtro')) {
+            // dd(explode(':',$request->filtro));
+            $condicoes = explode(':',$request->filtro);
+            $modelos = $modelos->where($condicoes[0],$condicoes[1],$condicoes[2]);
+        } else {
+            # code...
+        }
+        
+
         // dd($request->get('atributos')); // ou dd($request->atributos); // verificar se o filtro(parametro) atributo tem retorno
         if ($request->has('atributos')) {
             $atributos = $request->atributos;
