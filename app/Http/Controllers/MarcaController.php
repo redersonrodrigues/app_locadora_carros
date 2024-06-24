@@ -116,11 +116,20 @@ class MarcaController extends Controller
         // prepara a imagem para o update
         $image = $request->file('imagem');
         $imagem_urn = $image->store('imagens', 'public');
+        
+        // preencher os dados do objeto $marca com os dados do request
+        $marca->fill($request->all());
+        $marca->imagem = $imagem_urn; // imagem captada via request(fill) = imagem do file
+        // desta forma pode-se usar o metodo save() que trata tanto de update quanto de novos registros
+        //dd($marca->getAttributes());
+        $marca->save();
+        /*
         // efetua o update
         $marca->update([
             'nome'      => $request->nome,
             'imagem'    => $imagem_urn
         ]);
+        */
 
         return response()->json($marca, 200);
     }
@@ -136,7 +145,7 @@ class MarcaController extends Controller
         if ($marca === null) {
             return response()->json(['erro' => 'Impossível deletar o registro, o recurso pesquisado não existe'], 404);
         }
-        
+
         // remove um arquivo antigo caso um novo tenha sido enviado no request
         Storage::disk('public')->delete($marca->imagem);
 

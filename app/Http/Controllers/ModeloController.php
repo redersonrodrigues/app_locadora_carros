@@ -8,7 +8,8 @@ use Illuminate\Support\Facades\Storage;
 
 class ModeloController extends Controller
 {
-    public function __construct(Modelo $modelo) {
+    public function __construct(Modelo $modelo)
+    {
         $this->modelo = $modelo;
     }
 
@@ -67,9 +68,9 @@ class ModeloController extends Controller
     public function show($id)
     {
         $modelo = $this->modelo->with('marca')->find($id);
-        if($modelo === null) {
-            return response()->json(['erro' => 'Recurso pesquisado não existe'], 404) ;
-        } 
+        if ($modelo === null) {
+            return response()->json(['erro' => 'Recurso pesquisado não existe'], 404);
+        }
 
         return response()->json($modelo, 200);
     }
@@ -96,37 +97,41 @@ class ModeloController extends Controller
     {
         $modelo = $this->modelo->find($id);
 
-        if($modelo === null) {
+        if ($modelo === null) {
             return response()->json(['erro' => 'Impossível realizar a atualização. O recurso solicitado não existe'], 404);
         }
 
-        if($request->method() === 'PATCH') {
+        if ($request->method() === 'PATCH') {
 
             $regrasDinamicas = array();
 
             //percorrendo todas as regras definidas no Model
-            foreach($modelo->rules() as $input => $regra) {
-                
+            foreach ($modelo->rules() as $input => $regra) {
+
                 //coletar apenas as regras aplicáveis aos parâmetros parciais da requisição PATCH
-                if(array_key_exists($input, $request->all())) {
+                if (array_key_exists($input, $request->all())) {
                     $regrasDinamicas[$input] = $regra;
                 }
             }
-            
-            $request->validate($regrasDinamicas);
 
+            $request->validate($regrasDinamicas);
         } else {
             $request->validate($modelo->rules());
         }
-        
+
         //remove o arquivo antigo caso um novo arquivo tenha sido enviado no request
-        if($request->file('imagem')) {
+        if ($request->file('imagem')) {
             Storage::disk('public')->delete($modelo->imagem);
         }
-        
+
         $imagem = $request->file('imagem');
         $imagem_urn = $imagem->store('imagens/modelos', 'public');
 
+        $modelo->fill($request->all()); // recebe os dados da imagem via request
+        $modelo->imagem = $imagem_urn; // sobrepões os dados da imagem com os vindos do file
+        $modelo->save();
+
+        /*
         $modelo->update([
             'marca_id'      => $request->marca_id,
             'nome'          => $request->nome,
@@ -136,7 +141,7 @@ class ModeloController extends Controller
             'air_bag'       => $request->air_bag,
             'abs'           => $request->abs
         ]);
-
+        */
         return response()->json($modelo, 200);
     }
 
@@ -150,15 +155,14 @@ class ModeloController extends Controller
     {
         $modelo = $this->modelo->find($id);
 
-        if($modelo === null) {
+        if ($modelo === null) {
             return response()->json(['erro' => 'Impossível realizar a exclusão. O recurso solicitado não existe'], 404);
         }
 
         //remove o arquivo antigo
-        Storage::disk('public')->delete($modelo->imagem);        
+        Storage::disk('public')->delete($modelo->imagem);
 
         $modelo->delete();
         return response()->json(['msg' => 'O modelo foi removida com sucesso!'], 200);
-        
     }
 }
