@@ -30,13 +30,17 @@ class ModeloController extends Controller
         }
 
         if ($request->has('filtro')) {
+            $filtros = explode(';', $request->filtro);
+            //dd($filtros);
             // dd(explode(':',$request->filtro));
-            $condicoes = explode(':',$request->filtro);
-            $modelos = $modelos->where($condicoes[0],$condicoes[1],$condicoes[2]);
+            foreach ($filtros as $key => $condicao) {
+                $c = explode(':', $condicao);
+                $modelos = $modelos->where($c[0], $c[1], $c[2]);
+            }
         } else {
             # code...
         }
-        
+
 
         // dd($request->get('atributos')); // ou dd($request->atributos); // verificar se o filtro(parametro) atributo tem retorno
         if ($request->has('atributos')) {
@@ -44,7 +48,7 @@ class ModeloController extends Controller
             //dd($atributos_marca);
             //"id,nome,imagem" - quando de relacimanto - não esquecer de colocar a fk - neste caso = marca_id
             // portanto o conteúdo de atributos fica: id,nome,imagem,marca_id 
-            $modelos = $modelos->selectRaw($atributos)->get();            
+            $modelos = $modelos->selectRaw($atributos)->get();
         } else {
             $modelos = $modelos->get();
         }
