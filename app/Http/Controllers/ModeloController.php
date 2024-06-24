@@ -22,19 +22,25 @@ class ModeloController extends Controller
     {
         $modelos = array();
 
+        if ($request->has('atributos_marca')) {
+            $atributos_marca = $request->atributos_marca;
+            $modelos = $this->modelo->with('marca:id,' . $atributos_marca);
+        } else {
+            $modelos = $this->modelo->with('marca');
+        }
+
         // dd($request->get('atributos')); // ou dd($request->atributos); // verificar se o filtro(parametro) atributo tem retorno
-if ($request->has('atributos')) {
-    $atributos = $request->atributos;
+        if ($request->has('atributos')) {
+            $atributos = $request->atributos;
+            //dd($atributos_marca);
             //"id,nome,imagem" - quando de relacimanto - não esquecer de colocar a fk - neste caso = marca_id
             // portanto o conteúdo de atributos fica: id,nome,imagem,marca_id 
-    $modelos = $this->modelo->selectRaw($atributos)->with('marca')->get();
+            $modelos = $modelos->selectRaw($atributos)->get();            
+        } else {
+            $modelos = $modelos->get();
+        }
 
-        
-} else {
-    $modelos = $this->modelo->with('marca')->get();
-}
-
-// $this->modelo->with('marca')->get()
+        // $this->modelo->with('marca')->get()
         return response()->json($modelos, 200);
     }
 
