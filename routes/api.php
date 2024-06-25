@@ -23,21 +23,3 @@ Route::prefix('v1')->middleware('auth:api')->group(function () {
 
 
 Route::post('login',    [AuthController::class, 'login']);
-
-
-
-
-
-//Route::resource('cliente', 'App\Http\Controllers\ClienteController');
-
-//     Route::post('me', 'App\Http\Controllers\AuthController@me');
-//     Route::post('logout', 'App\Http\Controllers\AuthController@logout');
-//     Route::post('refresh', 'App\Http\Controllers\AuthController@refresh');
-//     Route::apiResource('cliente', 'App\Http\Controllers\ClienteController');
-//     Route::apiResource('carro', 'App\Http\Controllers\CarroController');
-//     Route::apiResource('locacao', 'App\Http\Controllers\LocacaoController');
-//     Route::apiResource('marca', 'App\Http\Controllers\MarcaController');
-//     Route::apiResource('modelo', 'App\Http\Controllers\ModeloController');
-
-
-// Route::post('login', 'App\Http\Controllers\AuthController@login');
