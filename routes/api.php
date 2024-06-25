@@ -10,19 +10,20 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 
 // o prefix é para indicar a versão da api
-Route::prefix('v1')->middleware('auth:api')->group(function() {
-Route::apiResource('cliente',   'App\Http\Controllers\ClienteController');
-Route::apiResource('carro',     'App\Http\Controllers\CarroController');
-Route::apiResource('locacao',   'App\Http\Controllers\LocacaoController');
-Route::apiResource('marca',     'App\Http\Controllers\MarcaController');
-Route::apiResource('modelo',    'App\Http\Controllers\ModeloController');
+Route::prefix('v1')->middleware('auth:api')->group(function () {
+    Route::post         ('me',       [AuthController::class, 'me']);
+    Route::apiResource  ('cliente',   'App\Http\Controllers\ClienteController');
+    Route::apiResource  ('carro',     'App\Http\Controllers\CarroController');
+    Route::apiResource  ('locacao',   'App\Http\Controllers\LocacaoController');
+    Route::apiResource  ('marca',     'App\Http\Controllers\MarcaController');
+    Route::apiResource  ('modelo',    'App\Http\Controllers\ModeloController');
 });
 
 
 Route::post('login',    [AuthController::class, 'login']);
 Route::post('logout',   [AuthController::class, 'logout']);
 Route::post('refresh',  [AuthController::class, 'refresh']);
-Route::post('me',       [AuthController::class, 'me']);
+
 
 
 //Route::resource('cliente', 'App\Http\Controllers\ClienteController');

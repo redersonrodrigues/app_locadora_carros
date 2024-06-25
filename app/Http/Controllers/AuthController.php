@@ -35,6 +35,7 @@ class AuthController extends Controller
         return 'refresh';
     }
     public function me(){
-        return 'me';
+        //dd(auth()->user());
+        return response()->json(auth()->user());
     }
 }
