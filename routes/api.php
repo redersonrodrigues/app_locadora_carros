@@ -13,6 +13,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::prefix('v1')->middleware('auth:api')->group(function () {
     Route::post         ('me',       [AuthController::class, 'me']              );
     Route::post         ('refresh',  [AuthController::class, 'refresh']         );
+    Route::post         ('logout',   [AuthController::class, 'logout']          );
     Route::apiResource  ('cliente',   'App\Http\Controllers\ClienteController'  );
     Route::apiResource  ('carro',     'App\Http\Controllers\CarroController'    );
     Route::apiResource  ('locacao',   'App\Http\Controllers\LocacaoController'  );
@@ -22,7 +23,7 @@ Route::prefix('v1')->middleware('auth:api')->group(function () {
 
 
 Route::post('login',    [AuthController::class, 'login']);
-Route::post('logout',   [AuthController::class, 'logout']);
+
 
 
 
