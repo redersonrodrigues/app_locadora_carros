@@ -21,6 +21,7 @@ import Marcas from './components/Marcas.vue';
 import InputContainer from './components/InputContainer.vue';
 import Table from './components/Table.vue';
 import Card from './components/Card.vue';
+import Modal from './components/Modal.vue';
 
 
 
@@ -32,6 +33,7 @@ app.component('marcas-component',Marcas);
 app.component('input-container-component', InputContainer);
 app.component('table-component', Table);
 app.component('card-component',Card);
+app.component('modal-component',Modal);
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
