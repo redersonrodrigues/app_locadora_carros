@@ -18,12 +18,14 @@ import ExampleComponent from './components/ExampleComponent.vue';
 import LoginComponent from './components/LoginComponent.vue';
 import Home from './components/Home.vue';
 import Marcas from './components/Marcas.vue';
+import InputContainer from './components/InputContainer.vue';
 
 // register of the components created for me
 app.component('example-component', ExampleComponent);
 app.component('login-component', LoginComponent);
 app.component('home-component', Home);
 app.component('marcas-component',Marcas);
+app.component('input-container-component', InputContainer);
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
