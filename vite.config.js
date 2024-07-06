@@ -19,7 +19,14 @@ export default defineConfig({
                 },
             },
         }),
+
     ],
+    server: {
+        host: 'localhost',
+    },
+    build: {
+        sourcemap: true,
+    },
     resolve: {
         alias: {
             vue: 'vue/dist/vue.esm-bundler.js',
