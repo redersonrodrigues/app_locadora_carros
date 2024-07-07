@@ -3,50 +3,45 @@
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th scope="col" v-for="(titulo, index) in titulos" :key="index" class="text-uppercase">{{ titulo }}</th>
+                    <th scope="col" v-for="(t, key) in titulos" :key="index">{{ t.titulo }}</th>
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="obj in filteredData" :key="obj.id">
-                    <td v-for="(valor, chave) in obj" :key="chave">
-                        <span v-if="chave === 'imagem'">
-                            <img :src="'/storage/' + valor" width="30" height="30">
+                <tr v-for="obj, chave in dadosFiltrados" :key="chave">
+                    <td v-for="valor,chaveValor in obj" :key="chaveValor">
+                        <span v-if="titulos[chaveValor].tipo == 'texto'">{{ valor }}</span>
+                        <span v-if="titulos[chaveValor].tipo == 'data'">{{ '...' + valor }}</span>
+                        <span v-if="titulos[chaveValor].tipo == 'imagem'">
+                             <img :src="'/storage/' + valor" width="30" height="30">
                         </span>
-                        <span v-else>
-                            {{ valor }}
-                        </span>
+
                     </td>
                 </tr>
-            </tbody>
+           </tbody>
         </table>
     </div>
 </template>
 
 <script>
 export default {
-    props: {
-        dados: {
-            type: Array,
-            required: true
-        },
-        titulos: {
-            type: Array,
-            required: true
-        }
-    },
-    // A computed property filteredData é usada para filtrar os dados antes da renderização. 
-    // Isso cria um novo objeto com apenas as chaves que estão presentes em titulos.
+    props: ['dados', 'titulos'],
     computed: {
-        filteredData() {
-            return this.dados.map(obj => {
-                const filteredObj = {};
-                Object.keys(obj).forEach(key => {
-                    if (this.titulos.includes(key)) {
-                        filteredObj[key] = obj[key];
-                    }
-                });
-                return filteredObj;
-            });
+        dadosFiltrados() {
+            let campos = Object.keys(this.titulos)
+            let dadosFiltrados = []
+
+            this.dados.map((item, chave) => {
+
+                let itemFiltrado = {}
+                campos.forEach(campo => {
+                    itemFiltrado[campo] = item[campo] // podemos utilizar a sintaxe de array para atribuir valores a objetos
+                })
+
+                dadosFiltrados.push(itemFiltrado)
+            })
+
+
+            return dadosFiltrados // retorne um array de objetos
         }
     }
 }
