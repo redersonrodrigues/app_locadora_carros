@@ -3,45 +3,50 @@
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th scope="col" v-for="(t, key) in titulos" :key="index">{{ t.titulo }}</th>
+                    <th scope="col" v-for="(t, key) in titulos" :key="key">{{ t.titulo }}</th>
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="obj, chave in dadosFiltrados" :key="chave">
-                    <td v-for="valor,chaveValor in obj" :key="chaveValor">
+                <tr v-for="(obj, chave) in dadosFiltrados" :key="chave">
+                    <td v-for="(valor, chaveValor) in obj" :key="chaveValor">
                         <span v-if="titulos[chaveValor].tipo == 'texto'">{{ valor }}</span>
                         <span v-if="titulos[chaveValor].tipo == 'data'">{{ '...' + valor }}</span>
                         <span v-if="titulos[chaveValor].tipo == 'imagem'">
-                             <img :src="'/storage/' + valor" width="30" height="30">
+                            <img :src="'/storage/' + valor" width="30" height="30">
                         </span>
-
                     </td>
                 </tr>
-           </tbody>
+            </tbody>
         </table>
     </div>
 </template>
 
 <script>
 export default {
-    props: ['dados', 'titulos'],
+    props: {
+        dados: {
+            type: Array,
+            default: () => []
+        },
+        titulos: {
+            type: Object,
+            default: () => ({})
+        }
+    },
     computed: {
         dadosFiltrados() {
-            let campos = Object.keys(this.titulos)
-            let dadosFiltrados = []
+            let campos = Object.keys(this.titulos);
+            let dadosFiltrados = [];
 
-            this.dados.map((item, chave) => {
-
-                let itemFiltrado = {}
+            this.dados.forEach((item) => {
+                let itemFiltrado = {};
                 campos.forEach(campo => {
-                    itemFiltrado[campo] = item[campo] // podemos utilizar a sintaxe de array para atribuir valores a objetos
-                })
+                    itemFiltrado[campo] = item[campo] || ''; // Atribui um valor padrão se o campo não existir
+                });
+                dadosFiltrados.push(itemFiltrado);
+            });
 
-                dadosFiltrados.push(itemFiltrado)
-            })
-
-
-            return dadosFiltrados // retorne um array de objetos
+            return dadosFiltrados; // Retorna um array de objetos
         }
     }
 }
