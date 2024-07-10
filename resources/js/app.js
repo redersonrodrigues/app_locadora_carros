@@ -23,6 +23,8 @@ import Table from './components/Table.vue';
 import Card from './components/Card.vue';
 import Modal from './components/Modal.vue';
 import Alert from './components/Alert.vue';
+import Paginate from './components/Paginate.vue';
+
 
 
 
@@ -36,6 +38,7 @@ app.component('table-component', Table);
 app.component('card-component',Card);
 app.component('modal-component',Modal);
 app.component('alert-component',Alert);
+app.component('paginate-component',Paginate);
 
 
 /**
