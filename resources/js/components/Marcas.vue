@@ -35,11 +35,15 @@
                 <!-- início do card de listagem de marcas -->
                 <card-component titulo="Relação de marcas">
                     <template v-slot:conteudo>
-                        <table-component :dados="marcas.data" :titulos="{
-                            id: { titulo: 'ID', tipo: 'texto' },
-                            nome: { titulo: 'Nome', tipo: 'texto' },
-                            imagem: { titulo: 'Imagem', tipo: 'imagem' },
-                            created_at: { titulo: 'Criação', tipo: 'data' },
+                        <table-component :dados="marcas.data"
+                            :visualizar =   "true"
+                            :atualizar  =   "true"
+                            :remover    =   "true"
+                            :titulos    =   "{
+                                id:             { titulo: 'ID', tipo: 'texto' },
+                                nome:           { titulo: 'Nome', tipo: 'texto' },
+                                imagem:         { titulo: 'Imagem', tipo: 'imagem' },
+                                created_at:     { titulo: 'Criação', tipo: 'data' },
                         }"></table-component>
                     </template>
 
