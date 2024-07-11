@@ -23,9 +23,15 @@ export default defineConfig({
     ],
     server: {
         host: 'localhost',
+        sourcemap: true,
     },
     build: {
         sourcemap: true,
+        rollupOptions: {
+      output: {
+        sourcemapExcludeSources: true
+      }
+    }
     },
     resolve: {
         alias: {
