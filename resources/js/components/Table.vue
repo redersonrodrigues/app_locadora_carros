@@ -17,10 +17,11 @@
                         </span>
                     </td>
                     <td v-if="visualizar || atualizar || remover">
-                        <button v-if="visualizar" class="btn btn-outline-primary btn-sm mr-1">Visualizar</button>
-                        <button v-if="atualizar" class="btn btn-outline-primary btn-sm mr-1">Atualizar</button>
-                        <button v-if="remover" class="btn btn-outline-danger btn-sm">Remover</button>
-
+                        <div class="d-flex justify-content-between">
+                            <button v-if="visualizar" class="btn btn-outline-primary btn-sm mx-1" data-bs-toggle="modal" data-bs-target="#modalMarcaVisualizar" >Visualizar</button>
+                            <button v-if="atualizar" class="btn btn-outline-primary btn-sm mx-1">Atualizar</button>
+                            <button v-if="remover" class="btn btn-outline-danger btn-sm mx-1">Remover</button>
+                        </div>
                     </td>
                 </tr>
             </tbody>
@@ -30,7 +31,7 @@
 
 <script>
 export default {
-    props: [ 'dados','titulos','visualizar','atualizar','remover'],
+    props: ['dados', 'titulos', 'visualizar', 'atualizar', 'remover'],
     computed: {
         dadosFiltrados() {
             let campos = Object.keys(this.titulos);
