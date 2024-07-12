@@ -4,7 +4,7 @@
             <thead>
                 <tr>
                     <th scope="col" v-for="(t, key) in titulos" :key="key">{{ t.titulo }}</th>
-                    <th v-if="visualizar || atualizar || remover"></th>
+                    <th v-if="visualizar.visivel || atualizar || remover"></th>
                 </tr>
             </thead>
             <tbody>
@@ -16,9 +16,9 @@
                             <img :src="'/storage/' + valor" width="30" height="30">
                         </span>
                     </td>
-                    <td v-if="visualizar || atualizar || remover">
+                    <td v-if="visualizar.visivel || atualizar || remover">
                         <div class="d-flex justify-content-between">
-                            <button v-if="visualizar" class="btn btn-outline-primary btn-sm mx-1" data-bs-toggle="modal" data-bs-target="#modalMarcaVisualizar" >Visualizar</button>
+                            <button v-if="visualizar.visivel" class="btn btn-outline-primary btn-sm mx-1" :data-bs-toggle="visualizar.dataBsToggle" :data-bs-target="visualizar.dataBsTarget" >Visualizar</button>
                             <button v-if="atualizar" class="btn btn-outline-primary btn-sm mx-1">Atualizar</button>
                             <button v-if="remover" class="btn btn-outline-danger btn-sm mx-1">Remover</button>
                         </div>
