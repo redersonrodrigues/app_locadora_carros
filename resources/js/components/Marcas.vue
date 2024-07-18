@@ -1,12 +1,16 @@
 <template>
     <div class="container">
         <div class="row justify-content-center">
+
             <div class="col-md-8">
+                <!-- {{ this.$store.state.teste }}
+                <button @click="this.$store.state.teste = 'Modifiquei o valor da store do Vuex'">Teste</button> -->
 
                 <!-- início do card de busca -->
                 <card-component titulo="Busca de marcas">
                     <template v-slot:conteudo>
                         <div class="row g-3">
+
                             <div class="col mb-3">
                                 <input-container-component titulo="ID" id="inputId" id-help="idHelp"
                                     texto-ajuda="Opcional. Informe o ID da marca">

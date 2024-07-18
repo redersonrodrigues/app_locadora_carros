@@ -4,9 +4,20 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 import './bootstrap';
-import {
-    createApp
-} from 'vue';
+
+/** Instalando e configurando o vuex */
+import { createApp } from 'vue';
+import { createStore } from 'vuex';
+
+// Create a new store instance.
+const store = createStore({
+    state() {
+        return {
+            teste: 'Teste de recuperação de valor da Store do vuex'
+        }
+    }
+})
+
 /**
  * Next, we will create a fresh Vue application instance. You may then begin
  * registering components with the application instance so they are ready
@@ -40,6 +51,8 @@ app.component('modal-component',Modal);
 app.component('alert-component',Alert);
 app.component('paginate-component',Paginate);
 
+// Use the store instance
+app.use(store);
 
 /**
  * The following block of code may be used to automatically register your
