@@ -41,12 +41,15 @@
                     <template v-slot:conteudo>
                         <table-component :dados="marcas.data"
                             :visualizar="{ visivel: true, dataBsToggle: 'modal', dataBsTarget: '#modalMarcaVisualizar' }"
-                            :atualizar="true" :remover="true" :titulos="{
+                            :atualizar="true" 
+                            :remover="{ visivel: true, dataBsToggle: 'modal', dataBsTarget: '#modalMarcaRemover' }" 
+                            :titulos="{
                                 id: { titulo: 'ID', tipo: 'texto' },
                                 nome: { titulo: 'Nome', tipo: 'texto' },
                                 imagem: { titulo: 'Imagem', tipo: 'imagem' },
                                 created_at: { titulo: 'Criação', tipo: 'data' },
-                            }"></table-component>
+                            }"
+                            ></table-component>
                     </template>
 
                     <template v-slot:rodape>
@@ -133,6 +136,25 @@
             </template>
         </modal-component>
         <!-- fim do modal de visualização de marca -->
+
+        <!-- início do modal de remoção de marca -->
+        <modal-component id="modalMarcaRemover" titulo="Remover marca">
+            <template v-slot:alertas></template>
+            <template v-slot:conteudo>
+                <!-- {{ this.$store.state.item }} -->
+                <input-container-component titulo="ID">
+                    <input type="text" class="form-control" :value="this.$store.state.item.id" disabled>
+                </input-container-component>
+
+                <input-container-component titulo="Nome da marca">
+                    <input type="text" class="form-control" :value="this.$store.state.item.nome">
+                </input-container-component>
+            </template>
+            <template v-slot:rodape>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+            </template>
+        </modal-component>
+        <!-- fim do modal de remoção de marca -->
 
     </div>
 </template>
