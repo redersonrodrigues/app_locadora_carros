@@ -179,7 +179,7 @@
                 <div class="form-group">
                     <input-container-component titulo="Imagem" id="novoImagem" id-help="novoImagemHelp"
                         texto-ajuda="Selecione uma imagem no formato PNG">
-                        <input type="file" class="form-control" id="novoImagem" aria-describedby="novoImagemHelp"
+                        <input type="file" class="form-control" id="atualizarImagem" aria-describedby="atualizarImagemHelp"
                             placeholder="Selecione uma imagem" @change="carregarImagem($event)">
                     </input-container-component>
                 </div>
@@ -237,7 +237,11 @@ export default {
             let formData = new FormData();
             formData.append('_method', 'patch')
             formData.append('nome', this.$store.state.item.nome)
-            formData.append('imagem', this.arquivoImagem[0])
+
+            if (this.arquivoImagem[0]) {
+                formData.append('imagem', this.arquivoImagem[0])
+            }
+
 
             let config = {
                 headers: {
@@ -253,6 +257,8 @@ export default {
             axios.post(url, formData, config)
                 .then(response => {
                     console.log('Registro atualizado com sucesso!', response)
+                    // limpar campo de seleção de arquivos
+                    atualizarImagem.value = ''
                     this.carregarLista()
 
                 })
@@ -260,128 +266,128 @@ export default {
                     console.log('Houve um erro na tentativa de atualização do registro.', errors.response)
 
                 })
-     },
-    remover() {
-        let confirmacao = confirm('Tem certeza que deseja remover este registro?')
+        },
+        remover() {
+            let confirmacao = confirm('Tem certeza que deseja remover este registro?')
 
-        if (!confirmacao) {
-            return false
-        };
+            if (!confirmacao) {
+                return false
+            };
 
-        let formData = new FormData();
-        formData.append('_method', 'delete')
+            let formData = new FormData();
+            formData.append('_method', 'delete')
 
-        let config = {
-            headers: {
-                Accept: 'application/json',
-                Authorization: this.token
-            }
-        }
-
-        let url = this.urlBase + '/' + this.$store.state.item.id
-        // let url = this.urlBase + '/1450' // forçar erro para teste
-        axios.post(url, formData, config)
-            .then(response => {
-                //console.log('Registro removido com sucesso!', response)
-                this.$store.state.transacao.status = 'sucesso'
-                this.$store.state.transacao.mensagem = response.data.msg
-                this.carregarLista()
-            })
-            .catch(errors => {
-                //console.log('Houve um erro na tentativa de remoção do registro.', errors.response)
-                this.$store.state.transacao.status = 'erro'
-                this.$store.state.transacao.mensagem = errors.response.data.erro
-            })
-    },
-    pesquisar() {
-        let filtro = ''
-        for (let chave in this.busca) {
-
-            if (this.busca[chave]) {
-
-                if (filtro != '') {
-                    filtro += ";"
+            let config = {
+                headers: {
+                    Accept: 'application/json',
+                    Authorization: this.token
                 }
-
-                filtro += chave + ':like:' + this.busca[chave]
             }
-        }
-        // console.log(filtro)
-        if (filtro != '') {
-            this.urlPaginacao = 'page=1'
-            this.urlFiltro = '&filtro=' + filtro
-        } else {
-            this.urlFiltro = ''
-        }
 
-        this.carregarLista() // requisitando novamente os dados para a api
+            let url = this.urlBase + '/' + this.$store.state.item.id
+            // let url = this.urlBase + '/1450' // forçar erro para teste
+            axios.post(url, formData, config)
+                .then(response => {
+                    //console.log('Registro removido com sucesso!', response)
+                    this.$store.state.transacao.status = 'sucesso'
+                    this.$store.state.transacao.mensagem = response.data.msg
+                    this.carregarLista()
+                })
+                .catch(errors => {
+                    //console.log('Houve um erro na tentativa de remoção do registro.', errors.response)
+                    this.$store.state.transacao.status = 'erro'
+                    this.$store.state.transacao.mensagem = errors.response.data.erro
+                })
+        },
+        pesquisar() {
+            let filtro = ''
+            for (let chave in this.busca) {
 
-    },
-    paginacao(l) {
-        if (l.url) {
-            // this.urlBase = l.url //ajustando a url de consulta com o parâmetro de página
-            this.urlPaginacao = l.url.split('?')[1]
-            this.carregarLista() //requisitando novamente os dados para nossa API
-        }
-    },
-    carregarLista() {
-        let url = this.urlBase + '?' + this.urlPaginacao + this.urlFiltro
+                if (this.busca[chave]) {
 
-        let config = {
-            headers: {
-                'Accept': 'application/json',
-                'Authorization': this.token
-            }
-        }
+                    if (filtro != '') {
+                        filtro += ";"
+                    }
 
-        axios.get(url, config)
-            .then(response => {
-                this.marcas = response.data
-                // console.log(this.marcas)
-            })
-            .catch(errors => {
-                console.log(errors)
-            })
-    },
-    carregarImagem(e) {
-        this.arquivoImagem = e.target.files
-    },
-    salvar() {
-        console.log(this.nomeMarca, this.arquivoImagem[0])
-
-        let formData = new FormData();
-        formData.append('nome', this.nomeMarca)
-        formData.append('imagem', this.arquivoImagem[0])
-
-        let config = {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-                'Accept': 'application/json',
-                'Authorization': this.token
-            }
-        }
-
-        axios.post(this.urlBase, formData, config)
-            .then(response => {
-                this.transacaoStatus = 'adicionado'
-                this.transacaoDetalhes = {
-                    mensagem: 'ID do registro: ' + response.data.id
+                    filtro += chave + ':like:' + this.busca[chave]
                 }
+            }
+            // console.log(filtro)
+            if (filtro != '') {
+                this.urlPaginacao = 'page=1'
+                this.urlFiltro = '&filtro=' + filtro
+            } else {
+                this.urlFiltro = ''
+            }
 
-                console.log(response)
-            })
-            .catch(errors => {
-                this.transacaoStatus = 'erro'
-                this.transacaoDetalhes = {
-                    mensagem: errors.response.data.message,
-                    dados: errors.response.data.errors
+            this.carregarLista() // requisitando novamente os dados para a api
+
+        },
+        paginacao(l) {
+            if (l.url) {
+                // this.urlBase = l.url //ajustando a url de consulta com o parâmetro de página
+                this.urlPaginacao = l.url.split('?')[1]
+                this.carregarLista() //requisitando novamente os dados para nossa API
+            }
+        },
+        carregarLista() {
+            let url = this.urlBase + '?' + this.urlPaginacao + this.urlFiltro
+
+            let config = {
+                headers: {
+                    'Accept': 'application/json',
+                    'Authorization': this.token
                 }
-                //errors.response.data.message
-            })
+            }
+
+            axios.get(url, config)
+                .then(response => {
+                    this.marcas = response.data
+                    // console.log(this.marcas)
+                })
+                .catch(errors => {
+                    console.log(errors)
+                })
+        },
+        carregarImagem(e) {
+            this.arquivoImagem = e.target.files
+        },
+        salvar() {
+            console.log(this.nomeMarca, this.arquivoImagem[0])
+
+            let formData = new FormData();
+            formData.append('nome', this.nomeMarca)
+            formData.append('imagem', this.arquivoImagem[0])
+
+            let config = {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'Accept': 'application/json',
+                    'Authorization': this.token
+                }
+            }
+
+            axios.post(this.urlBase, formData, config)
+                .then(response => {
+                    this.transacaoStatus = 'adicionado'
+                    this.transacaoDetalhes = {
+                        mensagem: 'ID do registro: ' + response.data.id
+                    }
+
+                    console.log(response)
+                })
+                .catch(errors => {
+                    this.transacaoStatus = 'erro'
+                    this.transacaoDetalhes = {
+                        mensagem: errors.response.data.message,
+                        dados: errors.response.data.errors
+                    }
+                    //errors.response.data.message
+                })
+        }
+    },
+    mounted() {
+        this.carregarLista()
     }
-},
-mounted() {
-    this.carregarLista()
-}
 }
 </script>
