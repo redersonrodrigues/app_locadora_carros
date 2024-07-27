@@ -207,19 +207,6 @@
 import axios from 'axios';
 import Paginate from './Paginate.vue'
 export default {
-    computed: {
-        token() {
-
-            let token = document.cookie.split(';').find(indice => {
-                return indice.includes('token=')
-            })
-
-            token = token.split('=')[1]
-            token = 'Bearer ' + token
-
-            return token
-        }
-    },
     components: { Paginate },
     data() {
         return {
@@ -252,8 +239,6 @@ export default {
             let config = {
                 headers: {
                     'Content-Type': 'multipart/form-data',
-                    'Accept': 'application/json',
-                    'Authorization': this.token
                 }
             }
 
@@ -289,16 +274,18 @@ export default {
             let formData = new FormData();
             formData.append('_method', 'delete')
 
-            let config = {
-                headers: {
-                    Accept: 'application/json',
-                    Authorization: this.token
-                }
-            }
+            // headers interceptado pelo axios, não há necessidade de declarar mais aqui
+            // let config = {
+            //     headers: {
+            //         Accept: 'application/json',
+            //         Authorization: this.token
+            //     }
+            // }
 
             let url = this.urlBase + '/' + this.$store.state.item.id
             // let url = this.urlBase + '/1450' // forçar erro para teste
-            axios.post(url, formData, config)
+
+            axios.post(url, formData)// removido o terceiro parametro de configuração (config)
                 .then(response => {
                     //console.log('Registro removido com sucesso!', response)
                     this.$store.state.transacao.status = 'sucesso'
@@ -345,14 +332,14 @@ export default {
         carregarLista() {
             let url = this.urlBase + '?' + this.urlPaginacao + this.urlFiltro
 
-            let config = {
-                headers: {
-                    'Accept': 'application/json',
-                    'Authorization': this.token
-                }
-            }
+            // let config = {
+            //     headers: {
+            //         'Accept': 'application/json',
+            //         'Authorization': this.token
+            //     }
+            // }
 
-            axios.get(url, config)
+            axios.get(url) // removido segundo parametro (config) porque não há necessidade como o do metodo remover
                 .then(response => {
                     this.marcas = response.data
                     // console.log(this.marcas)
@@ -374,8 +361,9 @@ export default {
             let config = {
                 headers: {
                     'Content-Type': 'multipart/form-data',
-                    'Accept': 'application/json',
-                    'Authorization': this.token
+                    /* interceptado pelo axios */
+                    // 'Accept': 'application/json',
+                    // 'Authorization': this.token
                 }
             }
 
