@@ -12,7 +12,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 // o prefix é para indicar a versão da api
 Route::prefix('v1')->middleware('auth:api')->group(function () {
     Route::post         ('me',       [AuthController::class, 'me']              );
-    Route::post         ('refresh',  [AuthController::class, 'refresh']         );
     Route::post         ('logout',   [AuthController::class, 'logout']          );
     Route::apiResource  ('cliente',   'App\Http\Controllers\ClienteController'  );
     Route::apiResource  ('carro',     'App\Http\Controllers\CarroController'    );
@@ -21,5 +20,5 @@ Route::prefix('v1')->middleware('auth:api')->group(function () {
     Route::apiResource  ('modelo',    'App\Http\Controllers\ModeloController'   );
 });
 
-
-Route::post('login',    [AuthController::class, 'login']);
+    Route::post         ('login',    [AuthController::class, 'login'  ]         );
+    Route::post         ('refresh',  [AuthController::class, 'refresh']         );

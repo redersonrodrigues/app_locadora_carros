@@ -38,7 +38,6 @@ axios.interceptors.request.use(
     config => {
         // definir para todas as requisições os parâmetros de accept e authorization
         config.headers.Accept = 'application/json'
-        config.headers.Authorization = 'Authorization interceptado para ser configurado para todas as requisições'
 
         /* Recuperando o token de autorização dos cookies */
         let token = document.cookie.split(';').find(indice => {
@@ -49,7 +48,7 @@ axios.interceptors.request.use(
         token = 'Bearer ' + token
 
         config.headers.Authorization = token
-        
+
         console.log('Interceptando o request antes do envio', config)
         return config
     },
@@ -65,7 +64,21 @@ axios.interceptors.response.use(
         return response
     },
     error => {
-        console.log('Erro na resposta: ', error)
+        console.log('Erro na resposta: ', error.response)
+        if (error.response.status == 401 && error.response.data.message == 'Unauthenticated.') {
+            console.log('Fazer uma nova requisição para a rota refresh')
+
+            axios.post('http://localhost:8000/api/refresh')
+                .then(response => {
+                    console.log('Refresh com sucesso: ', response);
+
+                    document.cookie = 'token='+response.data.token
+                    console.log('Token atualizado', response.data.token)
+                    window.location.reload()
+                })
+        }
+
+
         return Promise.reject(error)
     }
 )
