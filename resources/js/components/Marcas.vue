@@ -165,7 +165,12 @@
         <!-- Início do modal de atualização de marca -->
         <modal-component id="modalMarcaAtualizar" titulo="Atualizar marca">
 
-            <template v-slot:alertas></template>
+            <template v-slot:alertas>
+                <alert-component tipo='success' titulo="Transação realizada com sucesso!"
+                    :detalhes="this.$store.state.transacao" v-if="this.$store.state.transacao.status == 'sucesso'" />
+                <alert-component tipo="danger" titulo="Erro na transação." :detalhes="this.$store.state.transacao"
+                    v-if="this.$store.state.transacao.status == 'erro'" />
+            </template>
 
             <template v-slot:conteudo>
                 <div class="form-group">
@@ -179,12 +184,13 @@
                 <div class="form-group">
                     <input-container-component titulo="Imagem" id="novoImagem" id-help="novoImagemHelp"
                         texto-ajuda="Selecione uma imagem no formato PNG">
-                        <input type="file" class="form-control" id="atualizarImagem" aria-describedby="atualizarImagemHelp"
-                            placeholder="Selecione uma imagem" @change="carregarImagem($event)">
+                        <input type="file" class="form-control" id="atualizarImagem"
+                            aria-describedby="atualizarImagemHelp" placeholder="Selecione uma imagem"
+                            @change="carregarImagem($event)">
                     </input-container-component>
                 </div>
 
-                {{ this.$store.state.item }}
+                <!-- {{ this.$store.state.item }} -->
             </template>
 
             <template v-slot:rodape>
@@ -256,14 +262,20 @@ export default {
 
             axios.post(url, formData, config)
                 .then(response => {
-                    console.log('Registro atualizado com sucesso!', response)
+                    //console.log('Registro atualizado com sucesso!', response)
+                    this.$store.state.transacao.status = 'sucesso'
+                    this.$store.state.transacao.mensagem = 'Registro de marca atualizado com sucesso!'
                     // limpar campo de seleção de arquivos
                     atualizarImagem.value = ''
                     this.carregarLista()
 
                 })
                 .catch(errors => {
-                    console.log('Houve um erro na tentativa de atualização do registro.', errors.response)
+                    //console.log('Houve um erro na tentativa de atualização do registro.', errors.response)
+                    this.$store.state.transacao.status = 'erro'
+                    this.$store.state.transacao.mensagem = errors.response.data.message
+                    this.$store.state.transacao.dados = errors.response.data.errors
+
 
                 })
         },
