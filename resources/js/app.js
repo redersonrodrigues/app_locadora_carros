@@ -18,13 +18,36 @@ const store = createStore({
         }
     }
 })
-
 /**
  * Next, we will create a fresh Vue application instance. You may then begin
  * registering components with the application instance so they are ready
  * to use in your application's views. An example is included for you.
  */
 const app = createApp({});
+
+// Registrar a função global de formatação de data e tempo (criação de filtro global)
+app.config.globalProperties.$formataDataTempoGlobal = function (d) {
+    if (!d) return '';
+    d = d.split('T');
+
+    let data = d[0];
+    let tempo = d[1];
+
+    // Formatando a data
+    data = data.split('-');
+    data = data[2] + '/' + data[1] + '/' + data[0];
+
+    // Formatando o tempo
+    tempo = tempo.split('.');
+    tempo = tempo[0];
+
+    return data + ' ' + tempo;
+};
+
+
+
+
+
 import ExampleComponent from './components/ExampleComponent.vue';
 //  created  of the component
 import LoginComponent from './components/LoginComponent.vue';
