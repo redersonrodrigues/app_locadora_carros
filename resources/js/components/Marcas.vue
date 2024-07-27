@@ -41,9 +41,9 @@
                     <template v-slot:conteudo>
                         <table-component :dados="marcas.data"
                             :visualizar="{ visivel: true, dataBsToggle: 'modal', dataBsTarget: '#modalMarcaVisualizar' }"
-                            :atualizar="true"
-                            :remover="{ visivel: true, dataBsToggle: 'modal', dataBsTarget: '#modalMarcaRemover' }"
-                            :titulos="{
+                            :atualizar= "{ visivel: true, dataBsToggle: 'modal', dataBsTarget: '#modalMarcaAtualizar' }"
+                            :remover=   "{ visivel: true, dataBsToggle: 'modal', dataBsTarget: '#modalMarcaRemover' }"
+                            :titulos=   "{
                                 id: { titulo: 'ID', tipo: 'texto' },
                                 nome: { titulo: 'Nome', tipo: 'texto' },
                                 imagem: { titulo: 'Imagem', tipo: 'imagem' },
@@ -139,8 +139,8 @@
         <!-- início do modal de remoção de marca -->
         <modal-component id="modalMarcaRemover" titulo="Remover marca">
             <template v-slot:alertas>
-                <alert-component tipo='success' titulo="Transação realizada com sucesso!" :detalhes="this.$store.state.transacao"
-                    v-if="this.$store.state.transacao.status == 'sucesso'" />
+                <alert-component tipo='success' titulo="Transação realizada com sucesso!"
+                    :detalhes="this.$store.state.transacao" v-if="this.$store.state.transacao.status == 'sucesso'" />
                 <alert-component tipo="danger" titulo="Erro na transação." :detalhes="this.$store.state.transacao"
                     v-if="this.$store.state.transacao.status == 'erro'" />
             </template>
@@ -161,6 +161,36 @@
             </template>
         </modal-component>
         <!-- fim do modal de remoção de marca -->
+
+        <!-- Início do modal de atualização de marca -->
+        <modal-component id="modalMarcaAtualizar" titulo="Atualizar marca">
+
+            <template v-slot:alertas></template>
+
+            <template v-slot:conteudo>
+                <div class="form-group">
+                    <input-container-component titulo="Nome da marca" id="novoNome" id-help="novoNomeHelp"
+                        texto-ajuda="Informe o nome da marca">
+                        <input type="text" class="form-control" id="novoNome" aria-describedby="novoNomeHelp"
+                            placeholder="Nome da marca" v-model="nomeMarca">
+                    </input-container-component>
+                </div>
+
+                <div class="form-group">
+                    <input-container-component titulo="Imagem" id="novoImagem" id-help="novoImagemHelp"
+                        texto-ajuda="Selecione uma imagem no formato PNG">
+                        <input type="file" class="form-control" id="novoImagem" aria-describedby="novoImagemHelp"
+                            placeholder="Selecione uma imagem" @change="carregarImagem($event)">
+                    </input-container-component>
+                </div>
+            </template>
+
+            <template v-slot:rodape>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary" @click="atualizar()">Atualizar</button>
+            </template>
+        </modal-component>
+        <!-- Fim do modal de atualização de marca -->
 
     </div>
 </template>
@@ -197,6 +227,9 @@ export default {
         }
     },
     methods: {
+        atualizar() {
+            console.log(this.$store.state.item);
+        },
         remover() {
             let confirmacao = confirm('Tem certeza que deseja remover este registro?')
 
@@ -226,7 +259,7 @@ export default {
                 .catch(errors => {
                     //console.log('Houve um erro na tentativa de remoção do registro.', errors.response)
                     this.$store.state.transacao.status = 'erro'
-                    this.$store.state.transacao.mensagem = errors.response.data.erro                    
+                    this.$store.state.transacao.mensagem = errors.response.data.erro
                 })
         },
         pesquisar() {
